@@ -25,16 +25,16 @@ func TestSnapshot(t *testing.T) {
 	snap0 := "snap0"
 	snap1 := "snap1"
 	if err := Create(name); err != nil {
-		t.Fail()
+		t.Fatal(err)
 	}
 	if err := Snapshot(name + "@" + snap0); err != nil {
-		t.Fail()
+		t.Fatal(err)
 	}
 	if err := Snapshot(name + "@" + snap1); err != nil {
-		t.Fail()
+		t.Fatal(err)
 	}
 	if err := Destroy(name, true, false); err != nil {
-		t.Fail()
+		t.Fatal(err)
 	}
 }
 
@@ -46,17 +46,14 @@ func TestSendRecv(t *testing.T) {
 	snap1 := "snap1"
 
 	if err := Create(srcName); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 	if err := Create(dstName); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 
 	if err := Snapshot(srcName + "@" + snapFull); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 
 	g := new(sync.WaitGroup)
@@ -66,27 +63,23 @@ func TestSendRecv(t *testing.T) {
 		defer r.Close()
 		defer g.Done()
 		if err := Recv(dstName, true, r); err != nil {
-			t.Log(err)
-			t.Fail()
+			t.Fatal(err)
 		}
 	}()
 	go func() {
 		defer w.Close()
 		defer g.Done()
 		if err := Send((srcName + "@" + snapFull), w); err != nil {
-			t.Log(err)
-			t.Fail()
+			t.Fatal(err)
 		}
 	}()
 	g.Wait()
 
 	if err := Snapshot(srcName + "@" + snap0); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 	if err := Snapshot(srcName + "@" + snap1); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 	r, w = io.Pipe()
 	g.Add(2)
@@ -94,8 +87,7 @@ func TestSendRecv(t *testing.T) {
 		defer r.Close()
 		defer g.Done()
 		if err := Recv(dstName, true, r); err != nil {
-			t.Log(err)
-			t.Fail()
+			t.Fatal(err)
 		}
 	}()
 	go func() {
@@ -104,18 +96,15 @@ func TestSendRecv(t *testing.T) {
 		name0 := srcName + "@" + snapFull
 		name1 := srcName + "@" + snap1
 		if err := SendDelta(name0, name1, true, w); err != nil {
-			t.Log(err)
-			t.Fail()
+			t.Fatal(err)
 		}
 	}()
 	g.Wait()
 
 	if err := Destroy(dstName, true, false); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 	if err := Destroy(srcName, true, false); err != nil {
-		t.Log(err)
-		t.Fail()
+		t.Fatal(err)
 	}
 }
