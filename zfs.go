@@ -66,3 +66,12 @@ func Recv(name string, force bool, r io.Reader) error {
 	args = append(args, name)
 	return zfs(nil, r, args...)
 }
+
+func Rollback(name string, recent bool) error {
+	args := []string{"rollback"}
+	if recent {
+		args = append(args, "-r")
+	}
+	args = append(args, name)
+	return zfs(nil, nil, args...)
+}
