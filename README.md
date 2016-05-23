@@ -1,1 +1,1 @@
-# zfs
+ZFS command wrapper
