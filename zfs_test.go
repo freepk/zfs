@@ -62,8 +62,10 @@ func TestSendRecv(t *testing.T) {
 	go func() {
 		defer r.Close()
 		defer g.Done()
-		if err := Recv(dstName, true, r); err != nil {
+		if res, err := Recv(dstName, true, r); err != nil {
 			t.Fatal(err)
+		} else {
+			t.Log(res)
 		}
 	}()
 	go func() {
@@ -86,8 +88,10 @@ func TestSendRecv(t *testing.T) {
 	go func() {
 		defer r.Close()
 		defer g.Done()
-		if err := Recv(dstName, true, r); err != nil {
+		if res, err := Recv(dstName, true, r); err != nil {
 			t.Fatal(err)
+		} else {
+			t.Log(res)
 		}
 	}()
 	go func() {
