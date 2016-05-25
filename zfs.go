@@ -65,7 +65,7 @@ func recvSnapName(r io.Reader) string {
 	n := ""
 	for s.Scan() {
 		l := s.Text()
-		w := strings.Split(l, "@")
+		w := strings.Split(l, " ")
 		p := len(w) - 1
 		n = w[p]
 		s.Scan()
