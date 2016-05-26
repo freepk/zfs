@@ -49,7 +49,7 @@ func Send(name string, w io.Writer) error {
 	return zfs(w, nil, "send", name)
 }
 
-func SendDelta(name0, name1 string, intermediary bool, w io.Writer) error {
+func SendDiff(name0, name1 string, intermediary bool, w io.Writer) error {
 	args := []string{"send"}
 	if intermediary {
 		args = append(args, "-I")

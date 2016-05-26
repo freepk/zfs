@@ -99,7 +99,7 @@ func TestSendRecv(t *testing.T) {
 		defer g.Done()
 		name0 := srcName + "@" + snapFull
 		name1 := srcName + "@" + snap1
-		if err := SendDelta(name0, name1, true, w); err != nil {
+		if err := SendDiff(name0, name1, true, w); err != nil {
 			t.Fatal(err)
 		}
 	}()
