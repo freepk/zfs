@@ -133,3 +133,26 @@ func TestRollback(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestListSnap(t *testing.T) {
+	name := defaultPool + "/snapshotTest"
+	snap0 := "snap0"
+	snap1 := "snap1"
+	if err := Create(name); err != nil {
+		t.Fatal(err)
+	}
+	if err := Snapshot(name + "@" + snap0); err != nil {
+		t.Fatal(err)
+	}
+	if err := Snapshot(name + "@" + snap1); err != nil {
+		t.Fatal(err)
+	}
+	if list, err := ListSnap(name); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log(list)
+	}
+	if err := Destroy(name, true, false); err != nil {
+		t.Fatal(err)
+	}
+}

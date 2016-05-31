@@ -74,7 +74,7 @@ func recvSnapName(r io.Reader) string {
 }
 
 func Recv(name string, force bool, r io.Reader) (string, error) {
-	buf := &bytes.Buffer{}
+	buf := new(bytes.Buffer)
 	args := []string{"recv"}
 	if force {
 		args = append(args, "-F")
@@ -95,4 +95,23 @@ func Rollback(name string, recent bool) error {
 	}
 	args = append(args, name)
 	return zfs(nil, nil, args...)
+}
+
+func listSnapName(r io.Reader) []string {
+	s := bufio.NewScanner(r)
+	n := make([]string, 0)
+	s.Scan()
+	for s.Scan() {
+		n = append(n, s.Text())
+	}
+	return n
+}
+
+func ListSnap(name string) ([]string, error) {
+	buf := new(bytes.Buffer)
+	err := zfs(buf, nil, "list", "-r", "-t", "snapshot", "-o", "name", name)
+	if err != nil {
+		return nil, err
+	}
+	return listSnapName(buf), nil
 }
