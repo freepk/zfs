@@ -152,6 +152,11 @@ func TestListSnap(t *testing.T) {
 	} else {
 		t.Log(list)
 	}
+	if list, err := ListDiff(name + "@" + snap1); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log(list)
+	}
 	if err := Destroy(name, true, false); err != nil {
 		t.Fatal(err)
 	}

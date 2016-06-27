@@ -97,7 +97,7 @@ func Rollback(name string, recent bool) error {
 	return zfs(nil, nil, args...)
 }
 
-func listSnapName(r io.Reader) []string {
+func readStrings(r io.Reader) []string {
 	s := bufio.NewScanner(r)
 	n := make([]string, 0)
 	s.Scan()
@@ -113,5 +113,14 @@ func ListSnap(name string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	return listSnapName(buf), nil
+	return readStrings(buf), nil
+}
+
+func ListDiff(name string) ([]string, error) {
+	buf := new(bytes.Buffer)
+	err := zfs(buf, nil, "diff", "-t", "-H", name)
+	if err != nil {
+		return nil, err
+	}
+	return readStrings(buf), nil
 }
