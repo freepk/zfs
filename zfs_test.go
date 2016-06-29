@@ -134,7 +134,7 @@ func TestRollback(t *testing.T) {
 	}
 }
 
-func TestListSnap(t *testing.T) {
+func TestListSnapAndDiff(t *testing.T) {
 	name := defaultPool + "/snapshotTest"
 	snap0 := "snap0"
 	snap1 := "snap1"
